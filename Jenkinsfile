@@ -16,6 +16,7 @@ pipeline {
     stage('Compile Webapp') {
       steps {
         echo 'Compiling Webapp'
+          sh "mvn compile"
       }
     }
 
