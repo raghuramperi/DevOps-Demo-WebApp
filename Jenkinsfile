@@ -1,9 +1,10 @@
 pipeline {
   agent any
+  //defone tools maven,artifactory,kubernetes etc..global config..
   stages {
     stage('Clone Webapp') {
       steps {
-        git(url: 'https://github.com/raghuramperi/DevOps-Demo-WebApp.git', poll: true)
+        git(url: 'https://github.com/raghuramperi/DevOps-Demo-WebApp.git')
       }
     }
 
@@ -12,7 +13,7 @@ pipeline {
         echo 'Code Analysis using Sonar Qube'
         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
         sh 'mvn clean package'
-            sonar:sonar -Dsonar.host.url://http://23.101.202.169//
+            sonar:sonar -Dsonar.host.url://http://http://157.56.161.133//
             -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions
             timeout(time: 1, unit: 'HOURS')
       }
