@@ -10,11 +10,10 @@ pipeline {
     stage('Static Code Analysis') {
       steps {
         echo 'Code Analysis using Sonar Qube'
-        withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar', envOnly: true)
-        sh '''mvn clean package
-sonar:sonar -Dsonar.host.url://http://23.101.202.169//
--Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.includions
-'''
+        withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
+        sh 'mvn clean package
+            sonar:sonar -Dsonar.host.url://http://23.101.202.169//
+            -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions'
       }
     }
 
