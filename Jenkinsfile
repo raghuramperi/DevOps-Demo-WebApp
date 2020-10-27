@@ -13,7 +13,7 @@ pipeline {
         echo 'Code Analysis using Sonar Qube'
         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
         sh 'mvn clean package'
-            sonar:sonar -Dsonar.host.url://http://157.56.161.133//
+            sonar:sonar -Dsonar.host.url:http://104.42.51.111//
             -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions
             timeout(time: 1, unit: 'HOURS')
       }
