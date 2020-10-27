@@ -28,7 +28,7 @@ pipeline {
     stage('Deploy to Test') {
       steps {
         echo 'Deploy to Tomcat Server in Test Environment'
-        deploy adapters:[tomcat8(credentialsId: 'tomcat',path: '',url: 'http://104.42.45.194')],contextpath: '/QAWebapp'
+        deploy adapters:[tomcat8(credentialsId: 'tomcat',path: '',url: 'http://104.42.45.194')],contextPath: '/QAWebapp'
       }
     }
 
