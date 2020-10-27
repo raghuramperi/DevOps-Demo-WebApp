@@ -1,6 +1,7 @@
 pipeline {
   agent any
   //defone tools maven,artifactory,kubernetes etc..global config..
+  rtMaven.tool = "maven"
   stages {
     stage('Clone Webapp') {
       steps {
@@ -29,6 +30,7 @@ pipeline {
     stage('Deploy to Test') {
       steps {
         echo 'Deploy to Tomcat Server in Test Environment'
+        deploy adapters:[tomcat8(credentialsId: 'tomcat',path: '',url: 'http://')],contextpath: '/QAWebapp',
       }
     }
 
