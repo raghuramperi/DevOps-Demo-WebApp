@@ -12,6 +12,7 @@ pipeline {
         echo 'Code Analysis using Sonar Qube'
         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
         sh 'mvn clean package'
+        sonar:sonar -Dsonar.url=http://http://104.42.51.111// -Dsonar.sources=. -Dsonar.test.inclusions
         timeout(unit: 'HOURS', time: 1) {
           waitForQualityGate true
         }
