@@ -1,11 +1,9 @@
 pipeline {
   agent any
-  //defone tools maven,artifactory,kubernetes etc..global config..
-  
   stages {
     stage('Clone Webapp') {
       steps {
-        git(url: 'https://github.com/raghuramperi/DevOps-Demo-WebApp.git')
+        git 'https://github.com/raghuramperi/DevOps-Demo-WebApp.git'
       }
     }
 
@@ -14,7 +12,10 @@ pipeline {
         echo 'Code Analysis using Sonar Qube'
         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
         sh 'mvn clean package'
-      
+        timeout(unit: 'HOURS', time: 1) {
+          waitForQualityGate true
+        }
+
       }
     }
 
@@ -28,7 +29,6 @@ pipeline {
     stage('Deploy to Test') {
       steps {
         echo 'Deploy to Tomcat Server in Test Environment'
-       
       }
     }
 
