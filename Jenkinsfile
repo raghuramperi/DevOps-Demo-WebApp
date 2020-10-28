@@ -22,6 +22,8 @@ pipeline {
       
       }
     }
+      }
+    }
 
     stage('Compile Webapp') {
       steps {
@@ -29,19 +31,7 @@ pipeline {
         sh 'mvn compile'
       }
     }
-
-    stage('Deploy to Test') {
-      steps {
-        echo 'Deploy to Tomcat Server in Test Environment'
-      }
-    }
-
-    stage('Storing Artifacts') {
-      steps {
-        echo 'Storing Artifacts'
-      }
-    }
-
   }
 }
-  }
+
+   
