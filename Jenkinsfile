@@ -6,7 +6,6 @@ pipeline {
         git 'https://github.com/raghuramperi/DevOps-Demo-WebApp.git'
       }
     }
-
     stage('Static Code Analysis') {
       steps {
         echo 'Code Analysis using Sonar Qube'
