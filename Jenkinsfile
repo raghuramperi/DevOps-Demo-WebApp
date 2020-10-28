@@ -15,12 +15,9 @@ pipeline {
            mvn "$SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN "
          
           }
-        timeout(unit: 'MINUTES', time: 20) {
-           def qg = waitForQualityGate()
-           if(qg.status != 'OK') { 
-             error "Pipeline aborted due to quality gate failure: ${qg.status}"
-            }
-    }
+ 
+       
+    
       }
     }
 
