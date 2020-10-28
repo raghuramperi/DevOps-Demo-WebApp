@@ -14,10 +14,14 @@ pipeline {
         
         {
           sh 'mvn clean package'
-          sonar:sonar -Dsonar.url=http://http://104.42.51.111// -Dsonar.sources=. -Dsonar.test.inclusions
+          sonar:sonar -Dsonar.host.url=http://104.210.58.182// 
+          -Dsonar.sources=. -Dsonar.test.inclusions
           }
-        timeout(unit: 'HOURS', time: 1) {
-          waitForQualityGate true
+        timeout(unit: 'MINUTES', time: 20) {
+           def qg = waitForQualityGate()
+          if(qg.status != 'OK') { 
+            error "Pipeline aborthed due to quality gate failure: ${qg.status}"
+          }
         }
 
       }
