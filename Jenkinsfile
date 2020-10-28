@@ -13,9 +13,8 @@ pipeline {
         withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonar')
         
         {
-          sh 'mvn clean package'
-          sonar:sonar -Dsonar.host.url=http://104.210.58.182// 
-          -Dsonar.sources=. -Dsonar.test.inclusions
+           mvn "$SONAR_MAVEN_GOAL -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_AUTH_TOKEN "
+         
           }
         timeout(unit: 'MINUTES', time: 20) {
            def qg = waitForQualityGate()
