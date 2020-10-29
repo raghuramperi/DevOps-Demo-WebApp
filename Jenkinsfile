@@ -14,8 +14,7 @@ pipeline {
         {
           withSonarQubeEnv(credentialsId: 'sonar-test', installationName: 'sonarqube') { // You can override the credential to be used
        		sh 'mvn clean package 
-          sonar:sonar -Dsonar.host.url=http://104.42.192.90// -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions=**/test/java/servlet/createpage_junit.java 
-            -Dsonar.exclusions=**/test/java/servlet/createpage_junit.java'
+          sonar:sonar -Dsonar.host.url=http://104.42.192.90// -Dsonar.sources=. -Dsonar.tests=. -Dsonar.test.inclusions=**/test/java/servlet/createpage_junit.java -Dsonar.exclusions=**/test/java/servlet/createpage_junit.java'
           }
  
          timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
