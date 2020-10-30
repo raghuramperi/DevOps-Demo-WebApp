@@ -1,4 +1,4 @@
-SQL Commands CHANGED TODAY 10/29 tod
+SQL Commands CHANGED TODAY 10/29 today
 ------------
 
 SELECT  *FROM avn;
