@@ -1,3 +1,4 @@
+
 pipeline {
   agent any
  
@@ -12,16 +13,16 @@ pipeline {
     gitBranch = "*/master"
     
     //tomcat TEST Url and Path 
-    tomcatTest = "http://13.91.217.164:8080"
+    tomcatTest = "http://104.40.90.76:8080"
     testPath = "/QAWebapp"
     
     //tomcat PROD URL and Path 
-    tomcatProd = "http://13.82.141.219:8080"
+    tomcatProd = "http://52.188.114.16:8080"
     prodPath = "/ProdWebapp"
     
     
     // Sonarqube URL 
-    sonarPath = 'http://13.91.217.110/:9000'
+    sonarPath = 'http://104.40.91.36:9000'
     
     sonarInclusion = '**/test/java/servlet/createpage_junit.java'
     sonarExclusion = '**/test/java/servlet/createpage_junit.java'
@@ -49,9 +50,8 @@ pipeline {
     
     //Initiating the Jenkins Build 
     stage ('Initiation') {
-	          
+      
       steps {
-	echo 'Jenkins Build Initiation'
         slackSend channel: "${sChannel}", message: 'Starting Jenkins Build for Devops Web App . Build Number:' + "${buildnum}"
       }
     }
@@ -63,13 +63,13 @@ pipeline {
         withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonarqube')
         {sh 'mvn clean compile sonar:sonar -Dsonar.host.url=${sonarPath} -Dsonar.sources=. -Dsonar.tests=. -Dsonar.inclusions=${sonarInclusion} -Dsonar.test.exclusions=${sonarExclusion} -Dsonar.login=admin -Dsonar.password=admin' 
             }
-        slackSend channel: '#devops', message: 'Static test analysis completed'
+        slackSend channel: '#devops', message: 'Stattic test analysis completed'
       }
     } // Stage end
 
     
    //Compile the Web app 
-    stage('Compile-Web app') {
+    stage('Compile-Build') {
       steps {
         echo 'Build the code'
         sh 'mvn clean compile'
@@ -89,41 +89,31 @@ pipeline {
     //Store artifact and Build info in artifactory server
     stage('Store Artifact') {
       steps {
-        echo 'Store Artifacts' 
+        echo 'Store Artifact' 
         rtUpload(serverId: 'artifactory')
         rtPublishBuildInfo (serverId: 'artifactory')
         slackSend channel: "${sChannel}", message: 'Artifacts deployed to Artifactory'
       }
     }
 
-    // Parallay run UI test and Performance Test 
-    
-    stage('Run UI and Performance Test'){
-    
-      parallel {
-              
-              //Perform UI Test and Publish the report
-              stage('Perform UI Test') {
-                steps {
-                  echo 'UI Test'
-                  sh 'mvn test -f functionaltest/pom.xml'
-                  publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${uiPath}", reportFiles: 'index.html', reportName: 'UI-Test', reportTitles: ''])
-                  slackSend channel: "${sChannel}", message: 'UI Test Completed Successfully'
-                }
-              }
+       //Perform UI Test and Publish the report
+       stage('Perform UI Test') {
+          steps {
+          echo 'UI Test'
+          sh 'mvn test -f functionaltest/pom.xml'
+           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${uiPath}", reportFiles: 'index.html', reportName: 'UI-Test', reportTitles: ''])
+           slackSend channel: "${sChannel}", message: 'UI Test Completed Successfully'
+           }
+      } // Run UI Test end
 
-              //Run Performance Test using Blazemeter
-            //  stage('Performance Test') {
-            //    steps {
-            //      echo 'Performance test'
-           //       //blazeMeterTest(credentialsId: 'blazemeter', workspaceId: '680689', testId: '8642591.taurus')
-           //       slackSend channel: "${sChannel}", message: 'Performance Test completed'
-           //     }
-           //   }
-
-      } //Parallel end 
-    } //Parallel Stage end 
-    
+   //Run Performance Test using Blazemeter
+      stage('Performance Test') {
+        steps {
+            echo 'Performance test'
+            //blazeMeterTest(credentialsId: 'blazemeter', workspaceId: '680689', testId: '8642591.taurus')
+            slackSend channel: "${sChannel}", message: 'Performance Test completed'
+           }
+       }  // Performance test end 
     
     //Deploy the Webapp to Production tomcat Server 
     stage('Deploy to Production') {
