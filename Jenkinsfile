@@ -64,6 +64,11 @@ pipeline {
         withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonarqube')
         {sh 'mvn clean compile sonar:sonar -Dsonar.host.url=${sonarPath} -Dsonar.sources=. -Dsonar.tests=. -Dsonar.inclusions=${sonarInclusion} -Dsonar.test.exclusions=${sonarExclusion} -Dsonar.login=admin -Dsonar.password=admin' 
             }
+        timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+	      def qg = waitForQualityGate() // 
+	          if (qg.status != 'OK') {
+	             error "Pipeline stopped due to quality gate failure: ${qg.status}"
+	    }          
         //slackSend channel: '#devops', message: 'Stattic test analysis completed'
       }
     } // Stage end
