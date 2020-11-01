@@ -91,9 +91,9 @@ pipeline {
     stage('Store Artifact') {
       steps {
         echo 'Store Artifact' 
-        rtUpload(serverId: 'artifactory')
-        rtPublishBuildInfo (serverId: 'artifactory')
-        slackSend channel: "${sChannel}", message: 'Artifacts deployed to Artifactory'
+       // rtUpload(serverId: 'artifactory')
+       // rtPublishBuildInfo (serverId: 'artifactory')
+       // slackSend channel: "${sChannel}", message: 'Artifacts deployed to Artifactory'
       }
     }
 
