@@ -34,7 +34,7 @@ pipeline {
     sanityPath = "\\Acceptancetest\\target\\surefire-reports"
     
     //Slack Channel details
-    sChannel = "#devops"
+    //sChannel = "#devops"
     
   }
   
@@ -52,7 +52,8 @@ pipeline {
     stage ('Initiation') {
       
       steps {
-        slackSend channel: "${sChannel}", message: 'Starting Jenkins Build for Devops Web App . Build Number:' + "${buildnum}"
+        echo 'Initiation'
+        //slackSend channel: "${sChannel}", message: 'Starting Jenkins Build for Devops Web App . Build Number:' + "${buildnum}"
       }
     }
     // Static code analysis - inject sonarqube 
@@ -63,7 +64,7 @@ pipeline {
         withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonarqube')
         {sh 'mvn clean compile sonar:sonar -Dsonar.host.url=${sonarPath} -Dsonar.sources=. -Dsonar.tests=. -Dsonar.inclusions=${sonarInclusion} -Dsonar.test.exclusions=${sonarExclusion} -Dsonar.login=admin -Dsonar.password=admin' 
             }
-        slackSend channel: '#devops', message: 'Stattic test analysis completed'
+        //slackSend channel: '#devops', message: 'Stattic test analysis completed'
       }
     } // Stage end
 
@@ -82,7 +83,7 @@ pipeline {
         echo 'Deploy to Test'
         sh 'mvn clean package'
         deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: "${tomcatTest}")], contextPath: "${testPath}", war: '**/*.war'
-        slackSend channel: "${sChannel}", message: 'Code deployed to Test Server'
+        //slackSend channel: "${sChannel}", message: 'Code deployed to Test Server'
       }
     }
     
@@ -102,7 +103,7 @@ pipeline {
           echo 'UI Test'
           sh 'mvn test -f functionaltest/pom.xml'
            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${uiPath}", reportFiles: 'index.html', reportName: 'UI-Test', reportTitles: ''])
-           slackSend channel: "${sChannel}", message: 'UI Test Completed Successfully'
+           //slackSend channel: "${sChannel}", message: 'UI Test Completed Successfully'
            }
       } // Run UI Test end
 
@@ -111,7 +112,7 @@ pipeline {
         steps {
             echo 'Performance test'
             //blazeMeterTest(credentialsId: 'blazemeter', workspaceId: '680689', testId: '8642591.taurus')
-            slackSend channel: "${sChannel}", message: 'Performance Test completed'
+            //slackSend channel: "${sChannel}", message: 'Performance Test completed'
            }
        }  // Performance test end 
     
@@ -121,7 +122,7 @@ pipeline {
         echo 'Deploy to Production'
         sh 'mvn clean install'
         deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: "${tomcatProd}")], contextPath: "${prodPath}", war: '**/*.war'
-        slackSend channel: "${sChannel}", message: 'Code deployed to prod server'
+        //slackSend channel: "${sChannel}", message: 'Code deployed to prod server'
       }
     }
     
@@ -131,14 +132,15 @@ pipeline {
         echo 'Perform Sanity Check'
         sh 'mvn test'
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: "${sanityPath}", reportFiles: 'index.html', reportName: 'Sanity Test report', reportTitles: ''])
-        slackSend channel: "${sChannel}", message: 'Sanity test completed successfully'
+        //slackSend channel: "${sChannel}", message: 'Sanity test completed successfully'
       }
     }
     
     stage ('Completion') {
       
       steps {
-        slackSend channel: "${sChannel}", message: 'jenkins Build ' + "${buildnum}" + ' completed Successfully'
+         echo 'Completed Scuccessfully'
+        //slackSend channel: "${sChannel}", message: 'jenkins Build ' + "${buildnum}" + ' completed Successfully'
       }
     }
     
