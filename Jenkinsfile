@@ -139,7 +139,7 @@ pipeline {
     stage ('Completion') {
       
       steps {
-         echo 'Completed Scuccessfully'
+         echo 'Completed Scuccessfully Devops Pipeline'
         //slackSend channel: "${sChannel}", message: 'jenkins Build ' + "${buildnum}" + ' completed Successfully'
       }
     }
