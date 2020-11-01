@@ -68,7 +68,8 @@ pipeline {
 	      def qg = waitForQualityGate() // 
 	          if (qg.status != 'OK') {
 	             error "Pipeline stopped due to quality gate failure: ${qg.status}"
-	    }          
+	    } 
+	}
         //slackSend channel: '#devops', message: 'Stattic test analysis completed'
       }
     } // Stage end
